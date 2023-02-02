@@ -11,6 +11,12 @@ def plugin_loaded():
         v.run_command("inline_fold_all")
 
 
+def plugin_unloaded():
+    views = sublime.active_window().views()
+    for v in views:
+        v.run_command("inline_unfold_all")
+
+
 class InlineFoldListener(sublime_plugin.ViewEventListener):
     def on_load(self) -> None:
         self.view.run_command('inline_fold_all')
@@ -21,8 +27,7 @@ class InlineFoldListener(sublime_plugin.ViewEventListener):
         if r is None:
             return
 
-        cursors = [r for r in self.view.sel()]
-
+        cursors: List[sublime.Region] = [r for r in self.view.sel()]
         strings = find_strings(self.view)
         for string in strings:
             fold_region = get_fold_region(self.view, string)
@@ -40,13 +45,13 @@ class InlineFoldListener(sublime_plugin.ViewEventListener):
                 fold(self.view, fold_region)
 
 
-def get_fold_region(view: sublime.View, string_region: sublime.Region):
+def get_fold_region(view: sublime.View, string_region: sublime.Region) -> sublime.Region:
     start = view.find(r"""("|')""", string_region.begin())
     end = view.find(r"""("|')""", string_region.end() - 1)
     return sublime.Region(start.begin() + 1, end.end() - 1)
 
 
-def fold(view: sublime.View, fold_r: sublime.Region):
+def fold(view: sublime.View, fold_r: sublime.Region) -> None:
     word = view.substr(view.word(view.find_by_class(fold_r.begin(), False, sublime.PointClassification.WORD_START)))
     if not view.is_folded(fold_r) and word in preceding_text:
         view.fold(fold_r)
@@ -66,11 +71,13 @@ class InlineUnfoldAll(sublime_plugin.TextCommand):
         for r in regions:
             self.view.unfold(r)
 
+
 def first_selection_region(view: sublime.View) -> Optional[sublime.Region]:
     try:
         return view.sel()[0]
     except IndexError:
         return None
+
 
 def find_strings(view: sublime.View) -> List[sublime.Region]:
     return view.find_by_selector(string_scope)
