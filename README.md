@@ -18,7 +18,7 @@ from the command palette open `Preference: Settings` and change the `"inline_fol
 ```
 
 - `fold_selector` - The `fold_selector` should be the region that should be folded.
-- `preceding_text` - If specified, the region will be folded only if the `preceding_text` is before the `fold_selector`.\nInlineFold will scan max on line before to find the `preceding_text`.
+- `preceding_text` - If specified, the region will be folded only if the `preceding_text` is before the `fold_selector`. InlineFold will scan max on line before to find the `preceding_text`.
 
 Other examples:
 ```
