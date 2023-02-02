@@ -1,0 +1,33 @@
+{
+  "contributions": {
+    "settings": [
+      {
+        "file_patterns": [
+          "/Preferences.sublime-settings"
+        ],
+        "schema": {
+          "properties": {
+            "inline_fold.rules": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["fold_selector"],
+                "properties": {
+                  "fold_selector": {
+                    "type": "string",
+                    "markdownDescription": "The `fold_selector` should be the range that should be folded."
+                  },
+                  "preceding_text": {
+                    "type": "string",
+                    "description": "If specified, the range will be folded only if the `preceding_text` is before the `fold_selector`.\nInlineFold will scan max on line before to find the `preceding_text`.\nIf `preceding_text` is not found,\n the `fold_selector` region will not be folderd."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

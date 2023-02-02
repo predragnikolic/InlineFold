@@ -2,8 +2,6 @@ from typing import List, Optional
 import sublime_plugin
 import sublime
 
-string_scope = 'string.quoted.single, string.quoted.double, meta.function-call.arguments'
-preceding_text = ['class','className']
 
 def plugin_loaded():
     views = sublime.active_window().views()
@@ -15,6 +13,18 @@ def plugin_unloaded():
     views = sublime.active_window().views()
     for v in views:
         v.run_command("inline_unfold_all")
+
+
+def get_settings():
+    return sublime.load_settings('Preferences.sublime-settings')
+
+
+fallback_rules =  [
+    {
+        "fold_selector": "string.quoted.single, string.quoted.double",
+        "preceding_text": "class,className"
+    }
+]
 
 
 class InlineFoldListener(sublime_plugin.ViewEventListener):
@@ -40,21 +50,23 @@ class InlineFoldListener(sublime_plugin.ViewEventListener):
         if self.last_cursors != cursors_to_compare:
             return
         cursors = cursors_to_compare
-        strings = find_strings(self.view)
-        for string in strings:
-            fold_region = get_fold_region(string)
-            line = self.view.line(string)
-            if string.begin() > line.end():
-                continue
-            if string.end() < line.begin():
-                continue
-            is_cursor_inside = False
-            for cursor in cursors:
-                if line.contains(cursor) or line.intersects(cursor):
-                    self.view.unfold(string)
-                    is_cursor_inside = True
-            if not is_cursor_inside:
-                fold(self.view, fold_region)
+        rules = get_settings().get("inline_fold.rules") or fallback_rules
+        for rule in rules:
+            strings = find_by_selector(self.view, rule.get('fold_selector'))
+            for string in strings:
+                fold_region = get_fold_region(string)
+                line = self.view.line(string)
+                if string.begin() > line.end():
+                    continue
+                if string.end() < line.begin():
+                    continue
+                is_cursor_inside = False
+                for cursor in cursors:
+                    if line.contains(cursor) or line.intersects(cursor):
+                        self.view.unfold(string)
+                        is_cursor_inside = True
+                if not is_cursor_inside:
+                    fold(self.view, fold_region, rule.get('preceding_text'))
 
     def get_cursors(self) -> List[sublime.Region]:
         return [r for r in self.view.sel()]
@@ -63,7 +75,7 @@ def get_fold_region(string_region: sublime.Region) -> sublime.Region:
     return sublime.Region(string_region.begin() + 1, string_region.end() - 1)
 
 
-def fold(view: sublime.View, fold_r: sublime.Region) -> None:
+def fold(view: sublime.View, fold_r: sublime.Region, preceding_text: Optional[str] = None) -> None:
     if view.is_folded(fold_r):
         return
     if preceding_text:
@@ -85,17 +97,21 @@ def fold(view: sublime.View, fold_r: sublime.Region) -> None:
 
 class InlineFoldAll(sublime_plugin.TextCommand):
     def run(self, _: sublime.Edit) -> None:
-        strings = find_strings(self.view)
-        for string in strings:
-            fold_region = get_fold_region(string)
-            fold(self.view, fold_region)
+        rules = get_settings().get("inline_fold.rules") or fallback_rules
+        for rule in rules:
+            strings = find_by_selector(self.view, rule.get('fold_selector'))
+            for string in strings:
+                fold_region = get_fold_region(string)
+                fold(self.view, fold_region, rule.get('preceding_text'))
 
 
 class InlineUnfoldAll(sublime_plugin.TextCommand):
     def run(self, _: sublime.Edit) -> None:
-        regions = find_strings(self.view)
-        for r in regions:
-            self.view.unfold(r)
+        rules = get_settings().get("inline_fold.rules") or fallback_rules
+        for rule in rules:
+            strings = find_by_selector(self.view, rule.get('fold_selector'))
+            for string in strings:
+                self.view.unfold(string)
 
 
 def first_selection_region(view: sublime.View) -> Optional[sublime.Region]:
@@ -105,5 +121,5 @@ def first_selection_region(view: sublime.View) -> Optional[sublime.Region]:
         return None
 
 
-def find_strings(view: sublime.View) -> List[sublime.Region]:
-    return view.find_by_selector(string_scope)
+def find_by_selector(view: sublime.View, selector: str) -> List[sublime.Region]:
+    return view.find_by_selector(selector)

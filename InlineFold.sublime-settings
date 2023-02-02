@@ -1,14 +1,8 @@
 {
 	"inline_fold.rules": [
 		{
-			"selector": "string.quoted.single, string.quoted.double",
+			"fold_selector": "string.quoted.single, string.quoted.double",
 			"preceding_text": "class,className"
-		},
-		{
-			"selector": "meta.function-call.arguments"
-		},
-		{
-			"selector": "source.jsx meta.function.js meta.block.js"
 		}
 	]
 }
