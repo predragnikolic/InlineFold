@@ -2,7 +2,7 @@ from typing import List, Optional
 import sublime_plugin
 import sublime
 
-string_scope = 'string.quoted.single, string.quoted.double'
+string_scope = 'string.quoted.single, string.quoted.double, source.python meta.function-call.arguments.python'
 preceding_text = ['class', 'className']
 
 def plugin_loaded():
@@ -30,7 +30,7 @@ class InlineFoldListener(sublime_plugin.ViewEventListener):
         cursors: List[sublime.Region] = [r for r in self.view.sel()]
         strings = find_strings(self.view)
         for string in strings:
-            fold_region = get_fold_region(self.view, string)
+            fold_region = get_fold_region(string)
             line = self.view.line(string)
             if string.begin() > line.end():
                 continue
@@ -45,10 +45,8 @@ class InlineFoldListener(sublime_plugin.ViewEventListener):
                 fold(self.view, fold_region)
 
 
-def get_fold_region(view: sublime.View, string_region: sublime.Region) -> sublime.Region:
-    start = view.find(r"""("|')""", string_region.begin())
-    end = view.find(r"""("|')""", string_region.end() - 1)
-    return sublime.Region(start.begin() + 1, end.end() - 1)
+def get_fold_region(string_region: sublime.Region) -> sublime.Region:
+    return sublime.Region(string_region.begin() + 1, string_region.end() - 1)
 
 
 def fold(view: sublime.View, fold_r: sublime.Region) -> None:
@@ -61,7 +59,7 @@ class InlineFoldAll(sublime_plugin.TextCommand):
     def run(self, _: sublime.Edit) -> None:
         strings = find_strings(self.view)
         for string in strings:
-            fold_region = get_fold_region(self.view, string)
+            fold_region = get_fold_region(string)
             fold(self.view, fold_region)
 
 
