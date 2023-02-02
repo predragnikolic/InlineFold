@@ -6,6 +6,9 @@
 		},
 		{
 			"selector": "meta.function-call.arguments"
+		},
+		{
+			"selector": "source.jsx meta.function.js meta.block.js"
 		}
 	]
 }
