@@ -1,0 +1,11 @@
+{
+	"inline_fold.rules": [
+		{
+			"selector": "string.quoted.single, string.quoted.double",
+			"preceding_text": "class,className"
+		},
+		{
+			"selector": "meta.function-call.arguments"
+		}
+	]
+}

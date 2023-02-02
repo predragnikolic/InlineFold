@@ -3,8 +3,7 @@ import sublime_plugin
 import sublime
 
 string_scope = 'string.quoted.single, string.quoted.double, meta.function-call.arguments'
-# preceding_text = ['class', 'className']
-preceding_text = []
+preceding_text = ['class','className']
 
 def plugin_loaded():
     views = sublime.active_window().views()
@@ -68,9 +67,19 @@ def fold(view: sublime.View, fold_r: sublime.Region) -> None:
     if view.is_folded(fold_r):
         return
     if preceding_text:
-        word = view.substr(view.word(view.find_by_class(fold_r.begin(), False, sublime.PointClassification.WORD_START)))
+        word_region = view.word(view.find_by_class(fold_r.begin(), False, sublime.PointClassification.WORD_START))
+        word = view.substr(word_region)
         if word not in preceding_text:
             return
+        # region Row Tolerance
+        # the preciding preceding_text might be a few lines up.
+        # by default we will consider 1 row tolerance.
+        max_rows_to_tolerate = 1
+        word_row, _ = view.rowcol(word_region.begin())
+        fold_row, _ = view.rowcol(fold_r.begin())
+        if abs(fold_row - word_row) > max_rows_to_tolerate:
+            return
+        # endregion
     view.fold(fold_r)
 
 

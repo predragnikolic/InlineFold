@@ -1,3 +1,7 @@
+function foo() {
+	bar(dsad, dsad)
+	hello(dsad)
+}
 
 <body class="hello dasjdkla sdhjkash djkashd haksjdhaskddsa d asdjlkasd alskd dsadasd dsa dasd dsad aslkdjasdlja sld
 dasd asdljkasdlkajsd lkajsd lkasjdl  dsa das ddsadas dlaksdjalksdj lkasdlkasj dklasjdlasjd  dsadasd asdlkasdjlas jdlkasj dlkasjdlkajsdlajsd lkajsd lkajsdlkjaslkdjalksdj klsa djlkasdlka sjldjka sdlkjaskldjasld jlkasdjlksaj dklasj dlkajslkdj alsdj las
