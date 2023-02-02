@@ -1,5 +1,7 @@
 # InlineFold
 
+![output](https://user-images.githubusercontent.com/22029477/216466685-fe0c97a2-78a0-4462-b6a5-081779cbcdcb.gif)
+
 By default,
 InlineFold will fold only string that are preceded with the word "class" or "className".
 
