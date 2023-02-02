@@ -1,0 +1,10 @@
+[
+    {
+        "caption": "Inline: Fold All",
+        "command": "inline_fold_all"
+    },
+    {
+        "caption": "Inline: Unfold All",
+        "command": "inline_unfold_all"
+    }
+]
