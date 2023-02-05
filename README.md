@@ -1,13 +1,14 @@
 # InlineFold
 
-![output](https://user-images.githubusercontent.com/22029477/216466685-fe0c97a2-78a0-4462-b6a5-081779cbcdcb.gif)
-
 By default,
-InlineFold will fold only string that are preceded with the word "class" or "className"
+InlineFold will only fold string that are preceded with the word "class" or "className"
 and it unfolds when the caret (or selection) touches a line.
 
-To change the default,
-from the command palette open `Preference: Settings` and change the `"inline_fold.rules"` setting:
+![output](https://user-images.githubusercontent.com/22029477/216466685-fe0c97a2-78a0-4462-b6a5-081779cbcdcb.gif)
+
+### Change Fold Regions
+
+From the command palette open `Preference: Settings` and change the `"inline_fold.rules"` setting:
 ```jsonc
 // Preferences.sublime-settings
 {
