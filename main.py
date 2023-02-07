@@ -17,7 +17,7 @@ def plugin_unloaded():
 
 fallback_rules =  [
     {
-        "fold_selector": "string.quoted.single, string.quoted.double",
+        "fold_selector": "string.quoted.single - punctuation.definition.string, string.quoted.double - punctuation.definition.string",
         "preceding_text": "class,className"
     }
 ]
