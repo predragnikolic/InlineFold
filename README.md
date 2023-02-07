@@ -43,7 +43,6 @@ Other examples:
         },
         {
             // Example (only JavaScript): foo(a, b) {...}
-            //
             "fold_selector": "source.js meta.function.js meta.block.js - punctuation.section.block.begin - punctuation.section.block.end",
         }
     ]
