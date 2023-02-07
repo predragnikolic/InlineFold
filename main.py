@@ -48,7 +48,7 @@ class InlineFoldListener(sublime_plugin.ViewEventListener):
         cursors = cursors_to_compare
         rules = self.view.settings().get("inline_fold.rules", fallback_rules)
         for rule in rules:
-            strings = find_by_selector(self.view, rule.get('fold_selector'))
+            strings = self.view.find_by_selector(rule.get('fold_selector'))
             for string in strings:
                 fold_region = get_fold_region(string)
                 line = self.view.line(string)
@@ -95,7 +95,7 @@ class InlineFoldAll(sublime_plugin.TextCommand):
     def run(self, _: sublime.Edit) -> None:
         rules = self.view.settings().get("inline_fold.rules", fallback_rules)
         for rule in rules:
-            strings = find_by_selector(self.view, rule.get('fold_selector'))
+            strings = self.view.find_by_selector(rule.get('fold_selector'))
             for string in strings:
                 fold_region = get_fold_region(string)
                 fold(self.view, fold_region, rule.get('preceding_text'))
@@ -105,7 +105,7 @@ class InlineUnfoldAll(sublime_plugin.TextCommand):
     def run(self, _: sublime.Edit) -> None:
         rules = self.view.settings().get("inline_fold.rules", fallback_rules)
         for rule in rules:
-            strings = find_by_selector(self.view, rule.get('fold_selector'))
+            strings = self.view.find_by_selector(rule.get('fold_selector'))
             for string in strings:
                 self.view.unfold(string)
 
@@ -115,7 +115,3 @@ def first_selection_region(view: sublime.View) -> Optional[sublime.Region]:
         return view.sel()[0]
     except IndexError:
         return None
-
-
-def find_by_selector(view: sublime.View, selector: str) -> List[sublime.Region]:
-    return view.find_by_selector(selector)
