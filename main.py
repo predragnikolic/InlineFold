@@ -34,7 +34,7 @@ class InlineFoldListener(sublime_plugin.ViewEventListener):
     def on_selection_modified(self) -> None:
         self.schedule()
 
-    def schedule(self):
+    def schedule(self) -> None:
         cursors = self.get_cursors()
         if not cursors:
             return
@@ -42,7 +42,7 @@ class InlineFoldListener(sublime_plugin.ViewEventListener):
             self.last_cursors = cursors
             sublime.set_timeout(lambda: self.run_when_stable(cursors), 50)
 
-    def run_when_stable(self, cursors_to_compare: List[sublime.Region]):
+    def run_when_stable(self, cursors_to_compare: List[sublime.Region]) -> None:
         if self.last_cursors != cursors_to_compare:
             return
         cursors = cursors_to_compare
