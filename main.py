@@ -15,10 +15,6 @@ def plugin_unloaded():
         v.run_command("inline_unfold_all")
 
 
-def get_settings():
-    return sublime.load_settings('Preferences.sublime-settings')
-
-
 fallback_rules =  [
     {
         "fold_selector": "string.quoted.single, string.quoted.double",
@@ -50,7 +46,7 @@ class InlineFoldListener(sublime_plugin.ViewEventListener):
         if self.last_cursors != cursors_to_compare:
             return
         cursors = cursors_to_compare
-        rules = get_settings().get("inline_fold.rules") or fallback_rules
+        rules = self.view.settings().get("inline_fold.rules", fallback_rules)
         for rule in rules:
             strings = find_by_selector(self.view, rule.get('fold_selector'))
             for string in strings:
@@ -97,7 +93,7 @@ def fold(view: sublime.View, fold_r: sublime.Region, preceding_text: Optional[st
 
 class InlineFoldAll(sublime_plugin.TextCommand):
     def run(self, _: sublime.Edit) -> None:
-        rules = get_settings().get("inline_fold.rules") or fallback_rules
+        rules = self.view.settings().get("inline_fold.rules", fallback_rules)
         for rule in rules:
             strings = find_by_selector(self.view, rule.get('fold_selector'))
             for string in strings:
@@ -107,7 +103,7 @@ class InlineFoldAll(sublime_plugin.TextCommand):
 
 class InlineUnfoldAll(sublime_plugin.TextCommand):
     def run(self, _: sublime.Edit) -> None:
-        rules = get_settings().get("inline_fold.rules") or fallback_rules
+        rules = self.view.settings().get("inline_fold.rules", fallback_rules)
         for rule in rules:
             strings = find_by_selector(self.view, rule.get('fold_selector'))
             for string in strings:
