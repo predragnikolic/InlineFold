@@ -37,9 +37,9 @@ Other examples:
         },
         {
             // Example (only Python): v.run_command(...)
-            // The `- punctuation.section.arguments.begin.python` will not fold the open bracket
-            // The `- punctuation.section.arguments.end.python` will not fold the close bracket
-            "fold_selector": "meta.function-call.arguments.python - punctuation.section.arguments.begin.python - punctuation.section.arguments.end.python",
+            // The `- punctuation.section.arguments.begin` will not fold the open bracket
+            // The `- punctuation.section.arguments.end` will not fold the close bracket
+            "fold_selector": "meta.function-call.arguments.python - punctuation.section.arguments.begin - punctuation.section.arguments.end",
         },
         {
             // Example (only JavaScript): foo(a, b) {...}
