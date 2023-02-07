@@ -31,16 +31,20 @@ Other examples:
     "inline_fold.rules": [
         {
             // Example: <div class="..."></div>
+            // The `- punctuation.definition.string` will not fold the quotes
             "fold_selector": "string.quoted.single - punctuation.definition.string, string.quoted.double - punctuation.definition.string",
             "preceding_text": "class,className",
         },
         {
             // Example (only Python): v.run_command(...)
-            "fold_selector": "meta.function-call.arguments.python - punctuation.section.arguments.end.python ",
+            // The `- punctuation.section.arguments.begin.python` will not fold the open bracket
+            // The `- punctuation.section.arguments.end.python` will not fold the close bracket
+            "fold_selector": "meta.function-call.arguments.python - punctuation.section.arguments.begin.python - punctuation.section.arguments.end.python",
         },
         {
             // Example (only JavaScript): foo(a, b) {...}
-            "fold_selector": "source.js meta.function.js meta.block.js",
+            //
+            "fold_selector": "source.js meta.function.js meta.block.js - punctuation.section.block.begin - punctuation.section.block.end",
         }
     ]
 }
