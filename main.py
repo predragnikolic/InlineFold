@@ -72,7 +72,7 @@ class InlineFoldListener(sublime_plugin.ViewEventListener):
         return [r for r in self.view.sel()]
 
 def get_fold_region(string_region: sublime.Region) -> sublime.Region:
-    return sublime.Region(string_region.begin() + 1, string_region.end() - 1)
+    return sublime.Region(string_region.begin(), string_region.end())
 
 
 def fold(view: sublime.View, fold_r: sublime.Region, preceding_text: Optional[str] = None) -> None:
