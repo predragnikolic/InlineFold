@@ -15,7 +15,7 @@ From the command palette open `Preference: Settings` and change the `"inline_fol
     "inline_fold.rules": [
         {
             // Example: <div class="..."></div>
-            "fold_selector": "string.quoted.single, string.quoted.double",
+            "fold_selector": "string.quoted.single - punctuation.definition.string, string.quoted.double - punctuation.definition.string",
             "preceding_text": "class,className",
         }
     ]
@@ -31,12 +31,12 @@ Other examples:
     "inline_fold.rules": [
         {
             // Example: <div class="..."></div>
-            "fold_selector": "string.quoted.single, string.quoted.double",
+            "fold_selector": "string.quoted.single - punctuation.definition.string, string.quoted.double - punctuation.definition.string",
             "preceding_text": "class,className",
         },
         {
             // Example (only Python): v.run_command(...)
-            "fold_selector": "meta.function-call.arguments.python",
+            "fold_selector": "meta.function-call.arguments.python - punctuation.section.arguments.end.python ",
         },
         {
             // Example (only JavaScript): foo(a, b) {...}
