@@ -35,7 +35,7 @@ class InlineFoldListener(sublime_plugin.ViewEventListener):
         self.schedule()
 
     def schedule(self) -> None:
-        cursors = self.get_cursors()
+        cursors = [r for r in self.view.sel()]
         if not cursors:
             return
         if self.last_cursors != cursors:
@@ -45,30 +45,41 @@ class InlineFoldListener(sublime_plugin.ViewEventListener):
     def run_when_stable(self, cursors_to_compare: List[sublime.Region]) -> None:
         if self.last_cursors != cursors_to_compare:
             return
-        cursors = cursors_to_compare
+        cursors = self.last_cursors
         rules = self.view.settings().get("inline_fold.rules", fallback_rules)
         for rule in rules:
-            strings = self.view.find_by_selector(rule.get('fold_selector'))
-            for string in strings:
-                fold_region = get_fold_region(string)
-                line = self.view.line(string)
-                if string.begin() > line.end():
+            fold_regions = self.view.find_by_selector(rule.get('fold_selector'))
+            for fold_region in fold_regions:
+                line = self.view.line(fold_region)
+                if fold_region.begin() > line.end():
                     continue
-                if string.end() < line.begin():
+                if fold_region.end() < line.begin():
                     continue
                 is_cursor_inside = False
                 for cursor in cursors:
                     if line.contains(cursor) or line.intersects(cursor):
-                        self.view.unfold(string)
+                        self.view.unfold(fold_region)
                         is_cursor_inside = True
                 if not is_cursor_inside:
                     fold(self.view, fold_region, rule.get('preceding_text'))
 
-    def get_cursors(self) -> List[sublime.Region]:
-        return [r for r in self.view.sel()]
 
-def get_fold_region(string_region: sublime.Region) -> sublime.Region:
-    return sublime.Region(string_region.begin(), string_region.end())
+class InlineFoldAll(sublime_plugin.TextCommand):
+    def run(self, _: sublime.Edit) -> None:
+        rules = self.view.settings().get("inline_fold.rules", fallback_rules)
+        for rule in rules:
+            fold_regions = self.view.find_by_selector(rule.get('fold_selector'))
+            for fold_region in fold_regions:
+                fold(self.view, fold_region, rule.get('preceding_text'))
+
+
+class InlineUnfoldAll(sublime_plugin.TextCommand):
+    def run(self, _: sublime.Edit) -> None:
+        rules = self.view.settings().get("inline_fold.rules", fallback_rules)
+        for rule in rules:
+            fold_regions = self.view.find_by_selector(rule.get('fold_selector'))
+            for fold_region in fold_regions:
+                self.view.unfold(fold_region)
 
 
 def fold(view: sublime.View, fold_r: sublime.Region, preceding_text: Optional[str] = None) -> None:
@@ -80,7 +91,7 @@ def fold(view: sublime.View, fold_r: sublime.Region, preceding_text: Optional[st
         if word not in preceding_text:
             return
         # region Row Tolerance
-        # the preciding preceding_text might be a few lines up.
+        # the preceding_text might be a few lines up.
         # by default we will consider 1 row tolerance.
         max_rows_to_tolerate = 1
         word_row, _ = view.rowcol(word_region.begin())
@@ -89,25 +100,6 @@ def fold(view: sublime.View, fold_r: sublime.Region, preceding_text: Optional[st
             return
         # endregion
     view.fold(fold_r)
-
-
-class InlineFoldAll(sublime_plugin.TextCommand):
-    def run(self, _: sublime.Edit) -> None:
-        rules = self.view.settings().get("inline_fold.rules", fallback_rules)
-        for rule in rules:
-            strings = self.view.find_by_selector(rule.get('fold_selector'))
-            for string in strings:
-                fold_region = get_fold_region(string)
-                fold(self.view, fold_region, rule.get('preceding_text'))
-
-
-class InlineUnfoldAll(sublime_plugin.TextCommand):
-    def run(self, _: sublime.Edit) -> None:
-        rules = self.view.settings().get("inline_fold.rules", fallback_rules)
-        for rule in rules:
-            strings = self.view.find_by_selector(rule.get('fold_selector'))
-            for string in strings:
-                self.view.unfold(string)
 
 
 def first_selection_region(view: sublime.View) -> Optional[sublime.Region]:
