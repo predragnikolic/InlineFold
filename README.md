@@ -3,7 +3,7 @@
 <!--toc:start-->
 - [InlineFold](#inlinefold)
     - [Set Fold Regions Globally](#set-fold-regions-globally)
-    - [Set Fold Regions for one Syntax](#set-fold-regions-for-one-syntax)
+    - [Set Fold Regions per Syntax](#set-fold-regions-per-syntax)
 <!--toc:end-->
 
 By default,
@@ -31,7 +31,7 @@ From the top menu, select `Preferences > Settings` and change the `"inline_fold.
 - `fold_selector` - [Required] The `fold_selector` is the region that will be folded.
 - `preceding_text` - [Optional] The region will be folded only if the `preceding_text` is found before the `fold_selector`. InlineFold will scan max one line before to find the `preceding_text`. Multiple words can be specified by separating them with a comma `,` (example `"preceding_text": "class,className"`).
 
-### Set Fold Regions for one Syntax
+### Set Fold Regions per Syntax
 
 If a rule is specific to a particular syntax, for example Python.
 Open a python file.
