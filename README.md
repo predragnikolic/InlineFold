@@ -35,7 +35,7 @@ From the top menu, select `Preferences > Settings` and change the `"inline_fold.
 
 If a rule is specific to a particular syntax, for example Python.
 Open a python file.
-Click `Preferences > Settings - Syntax Specific` and specify the `"inline_fold.rules"` that should apply to Python files.
+Click `Preferences > Settings - Syntax Specific` and specify the `"inline_fold.rules"`. Those rules will only apply to Python files.
 
 ```jsonc
 // Python.sublime-settings
