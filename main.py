@@ -88,7 +88,7 @@ def fold(view: sublime.View, fold_r: sublime.Region, preceding_text: Optional[st
     if preceding_text:
         word_region = view.word(view.find_by_class(fold_r.begin(), False, sublime.PointClassification.WORD_START))
         word = view.substr(word_region)
-        if word not in preceding_text:
+        if word not in preceding_text.split(','):
             return
         # region Row Tolerance
         # the preceding_text might be a few lines up.
