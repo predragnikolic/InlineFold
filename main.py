@@ -48,7 +48,7 @@ class InlineFoldListener(sublime_plugin.ViewEventListener):
         cursors = self.last_cursors
         rules = self.view.settings().get("inline_fold.rules", fallback_rules)
         for rule in rules:
-            fold_regions = self.view.find_by_selector(rule.get('fold_selector'))
+            fold_regions = get_fold_regions(self.view, rule.get('fold_selector'))
             for fold_region in fold_regions:
                 line = self.view.line(fold_region)
                 if fold_region.begin() > line.end():
@@ -107,3 +107,14 @@ def first_selection_region(view: sublime.View) -> Optional[sublime.Region]:
         return view.sel()[0]
     except IndexError:
         return None
+
+def get_fold_regions(view: sublime.View, selector: str) -> List[sublime.Region]:
+    # region Define Filter Region
+    visible_region = view.visible_region()
+    offset =  10000
+    filter_region = sublime.Region(visible_region.begin() - offset, visible_region.end() + offset)
+    # endregion
+    fold_regions = view.find_by_selector(selector)
+    # filter out regions to improve performance in large files
+    fold_regions = list(filter(lambda fold_region: filter_region.contains(fold_region), fold_regions))
+    return fold_regions
