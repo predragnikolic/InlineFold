@@ -15,14 +15,6 @@ def plugin_unloaded():
         v.run_command("inline_unfold_all")
 
 
-fallback_rules =  [
-    {
-        "fold_selector": "string.quoted.single - punctuation.definition.string, string.quoted.double - punctuation.definition.string",
-        "preceding_text": "class,className"
-    }
-]
-
-
 class InlineFoldListener(sublime_plugin.ViewEventListener):
     def __init__(self, view: sublime.View) -> None:
         super().__init__(view)
@@ -46,7 +38,7 @@ class InlineFoldListener(sublime_plugin.ViewEventListener):
         if self.last_cursors != cursors_to_compare:
             return
         cursors = self.last_cursors
-        rules = self.view.settings().get("inline_fold.rules", fallback_rules)
+        rules = self.view.settings().get("inline_fold.rules", [])
         for rule in rules:
             fold_regions = self.view.find_by_selector(rule.get('fold_selector'))
             look_region = get_look_region(self.view)
@@ -69,7 +61,7 @@ class InlineFoldListener(sublime_plugin.ViewEventListener):
 
 class InlineFoldAll(sublime_plugin.TextCommand):
     def run(self, _: sublime.Edit) -> None:
-        rules = self.view.settings().get("inline_fold.rules", fallback_rules)
+        rules = self.view.settings().get("inline_fold.rules", [])
         for rule in rules:
             fold_regions = self.view.find_by_selector(rule.get('fold_selector'))
             for fold_region in fold_regions:
@@ -78,7 +70,7 @@ class InlineFoldAll(sublime_plugin.TextCommand):
 
 class InlineUnfoldAll(sublime_plugin.TextCommand):
     def run(self, _: sublime.Edit) -> None:
-        rules = self.view.settings().get("inline_fold.rules", fallback_rules)
+        rules = self.view.settings().get("inline_fold.rules", [])
         for rule in rules:
             fold_regions = self.view.find_by_selector(rule.get('fold_selector'))
             for fold_region in fold_regions:
