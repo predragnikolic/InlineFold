@@ -35,6 +35,8 @@ class InlineFoldListener(sublime_plugin.ViewEventListener):
             sublime.set_timeout(lambda: self.run_when_stable(cursors), 50)
 
     def run_when_stable(self, cursors_to_compare: List[sublime.Region]) -> None:
+        if not self.view.is_valid():
+            return
         if self.last_cursors != cursors_to_compare:
             return
         cursors = self.last_cursors
