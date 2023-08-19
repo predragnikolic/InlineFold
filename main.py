@@ -78,6 +78,8 @@ class InlineUnfoldAll(sublime_plugin.TextCommand):
 
 
 def fold(view: sublime.View, fold_r: sublime.Region, preceding_text: Optional[str] = None) -> None:
+    if view.substr(fold_r).isspace(): # closes: https://github.com/predragnikolic/InlineFold/issues/4
+        return
     if view.is_folded(fold_r):
         return
     if preceding_text:
