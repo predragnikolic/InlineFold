@@ -24,7 +24,7 @@ From the top menu, select `Preferences > Settings` and specify the `"inline_fold
 ```
 
 - `fold_selector` - [Required] The `fold_selector` is the region that will be folded.
-- `preceding_text` - [Optional] The region will be folded only if the `preceding_text` is found before the `fold_selector`. InlineFold will scan max one line before finding the `preceding_text`. Multiple words can be specified by separating them `with a comma`,` (example` `"preceding_text": "class,className"`).
+- `preceding_text` - [Optional] The region will be folded only if the `preceding_text` is found before the `fold_selector`. InlineFold will scan max one line before finding the `preceding_text`. Multiple words can be specified by separating them with a comma`,` (example `"preceding_text": "class,className"`).
 
 ### Set Fold Regions per Syntax
 
