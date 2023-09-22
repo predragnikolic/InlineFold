@@ -60,7 +60,14 @@ Here is a list of recipes:
             "fold_selector": "string.quoted.single - punctuation.definition.string, string.quoted.double - punctuation.definition.string",
             "preceding_text": "class,className",
         },
-
+        // Fold <script> (components / inline JS / scoped JS)
+        {
+            "fold_selector": "text.html.basic  source.js.embedded.html",
+        },
+        // Fold <style> (components / inline CSS / scoped CSS)
+        {
+            "fold_selector": "text.html.basic  source.css.embedded.html",
+        },
         // [Python] Fold docstring except for the first line of the docs string.
         // class Person:
         //     """
