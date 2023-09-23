@@ -47,9 +47,9 @@ Click `Preferences > Settings - Syntax Specific` and specify the `"inline_fold.r
 }
 ```
 
-### Recipes
+### Examples
 
-Here is a list of recipes:
+Here is a few examples:
 
 ```jsonc
 {
@@ -72,7 +72,6 @@ Here is a list of recipes:
 }
 ```
 
-
-
+For more example go [here](https://github.com/predragnikolic/InlineFold/issues/8).
 
 
