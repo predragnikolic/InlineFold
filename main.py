@@ -19,11 +19,20 @@ class InlineFoldListener(sublime_plugin.ViewEventListener):
     def __init__(self, view: sublime.View) -> None:
         super().__init__(view)
         self.last_cursors = []
+        # skip_folding was introduced to fix https://github.com/predragnikolic/InlineFold/issues/10
+        self.skip_folding = False
 
     def on_load(self) -> None:
         self.view.run_command('inline_fold_all')
 
+    def on_text_command(self, command: str, _args: dict) -> None:
+        if (command == 'fold'):
+            self.skip_folding = True
+
     def on_selection_modified(self) -> None:
+        if self.skip_folding:
+            self.skip_folding = False
+            return
         self.schedule()
 
     def schedule(self) -> None:
