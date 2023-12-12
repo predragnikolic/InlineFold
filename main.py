@@ -110,6 +110,27 @@ def fold(view: sublime.View, fold_r: sublime.Region, preceding_text: Optional[st
     view.fold(fold_r)
 
 
+class FixFoldsWhenFormattingListener(sublime_plugin.TextChangeListener):
+    # Attempt to fix https://github.com/predragnikolic/InlineFold/issues/9
+    # This code here will try to detect if multiple lines were formatted
+    # and if so, it will retrigger the inline_fold_all.
+    def on_text_changed(self, changes: List[sublime.TextChange]):
+        if not self.buffer:
+            return
+        view = self.buffer.primary_view()
+        if not view:
+            return
+        for c in changes:
+            is_editing_multiple_lines = '\n' in c.str
+            if is_editing_multiple_lines:
+                def retrigger_fold():
+                    # first unfold all - this might lead to unwanted behavoir
+                    [view.unfold(r) for r in view.folded_regions()]
+                    view.run_command('inline_fold_all')
+                sublime.set_timeout(retrigger_fold, 0)
+                break
+
+
 def first_selection_region(view: sublime.View) -> Optional[sublime.Region]:
     try:
         return view.sel()[0]
